@@ -1,0 +1,65 @@
+<?php
+    session_start();
+    $err = 0;
+    if(isset($_POST["nume"]) && isset($_POST["parola"])){
+        $users = array("it", "pr&media","evaluari","re","ri","proiecte");
+        $password = "1234567";
+        foreach ($users as $user){
+            if($user == strtolower($_POST["nume"])){
+                if($password ==$_POST["parola"]){
+                    $_SESSION["logat"] = $user;
+                    echo 'S-a logat ca si ' . $_SESSION["logat"];
+                    //header("Location: /selectMember.php");
+                }
+                else {
+                    $err = 1;
+                }
+            }
+        }
+    }
+    
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<a href="http://www.asii.ro" class="backBotton">
+    <b>Inapoi pe asii.ro</b>
+</a>
+<div class="content">
+    <header>
+        <img id="logo" src="img/logoASII.png"/>
+        <span><b>Database Update</b></span>
+    </header>
+    <footer>
+        <form class="submitForm" method="post" action="login.php" enctype="multipart/form-data">
+            <br>
+            <input type="text" name="nume" placeholder="Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Name' "/><br>
+            <input type="password" name="parola" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password' "/><br>
+            <button id="button" type="submit">Trimite</button> <br>
+            <div>
+                <?php
+                    if($err == 1 ) {
+                        echo '<p id="error"> Userul si parola nu sunt valide. </p>';
+                    }
+                    else {
+                        //header("Location: newPage.php");
+                    }
+                ?>
+            </div>
+
+        </form>
+    </footer>
+</div>
+<footer id="footer">
+    Asociaţia Studenţilor Informaticieni Ieşeni (AŞII) este reprezentată de un grup de persoane determinate, creative şi dinamice, ce au în comun pasiunea pentru Informatică şi împărtăşesc un set de<br>
+    ţeluri şi valori. Activităţile organizate în cadrul asociaţiei se adresează studenţilor şi profesorilor Facultăţii de Informatică Iaşi, dar şi comunităţii IT din România, dorind să promoveze proactivitatea,<br>
+    dezvoltarea profesională, personală şi socială.<br>
+    Copyright © ASII 2016
+</footer>
+</body>
+</html>
