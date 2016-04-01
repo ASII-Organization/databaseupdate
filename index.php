@@ -1,3 +1,24 @@
+<?php
+require "core/functions.php";
+$mesage = "0";
+if(isset($_POST["submit"])) {
+    if (isset($_POST["nume"]) && isset($_POST["prenume"]) && isset($_POST["facebook"]) && isset($_POST["email"]) && isset($_POST["departament"]) && isset($_POST["phone"])) {
+        $data = array(
+            "nume" => $_POST["nume"],
+            "prenume" => $_POST["prenume"],
+            "facebook" => $_POST["facebook"],
+            "email" => $_POST["email"],
+            "departament" => $_POST["departament"],
+            "phone" => $_POST["phone"]
+        );
+        $mesage = insert($data);
+        if ($mesage == false) {
+            $mesage = "Nu ai introdus toate datele obligatorii";
+        }
+    }
+    else $mesage = "Campurile obligatorii nu au fost completate!";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,27 +35,30 @@
         <img id="logo" src="img/logoASII.png"/>
         <span><b>Database Update</b></span>
     </header>
-    <footer>
-        <form class="submitForm" method="post" action=" " enctype="multipart/form-data">
+    <section>
+        <form class="submitForm" method="post" action="index.php" enctype="multipart/form-data">
             <br>
             <input type="text" name="nume" placeholder="Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Name' "/><br>
             <input type="text" name="prenume" placeholder="Prenume" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Prenume' "/><br>
             <input type="text" name="facebook" placeholder="Facebook url" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Facebook url' "/><br>
-            <input type="text" name="departament" placeholder="Departament(IT, Proiecte, Pr&amp;Media, Evaluari, RI, RE)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Departament(IT, Proiecte, Pr&ampMedia, Evaluari, RI, RE)' "/><br>
+            <input type="text" name="departament" placeholder="Departament(IT, Proiecte, Pr&amp;Media, Evaluari, RI, RE)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Departament(IT, Proiecte, Pr&amp;Media, Evaluari, RI, RE)' "/><br>
 
             <input type="text" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email' "/><br>
             <input type="text" name="phone" placeholder="Numar telefon" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Numar telefon' "/><br>
 
             <p id="imageUpload">Select image to upload:</p>
             <input type="file" name="fileToUpload" id="fileToUpload">
-            <button id="button" type="submit">Trimite</button>
-            <div>
-                <p id="succes">Informatiile furnizate de tine au fost trimise cu success! <br>Multumim pentru timpul acordat!</p>
-                <p id="error"> Nu s-a putut trimite deoarece numele si prenumele nu se potrivesc cu nici un membru activ.<br> Pentru mai multe detalii te rog sa contactezi coordonatorul de departament din care faci parte. </p>
-            </div>
-
+            <button id="button" type="submit" name="submit" value="1">Trimite</button>
+            <br>
         </form>
-    </footer>
+        <?php
+        if($mesage != "0")
+            if($mesage == "Datele tale au fost inscrise cu succes!")
+                echo  '<p id="succes">Informatiile furnizate de tine au fost trimise cu success! <br>Multumim pentru timpul acordat!</p>';
+            else echo '<p id="error"> '. $mesage.' <br> Pentru mai multe detalii te rog sa contactezi coordonatorul de departament din care faci parte. </p>';
+        ?>
+        <br>
+    </section>
 </div>
 <footer id="footer">
     Asociaţia Studenţilor Informaticieni Ieşeni (AŞII) este reprezentată de un grup de persoane determinate, creative şi dinamice, ce au în comun pasiunea pentru Informatică şi împărtăşesc un set de<br>

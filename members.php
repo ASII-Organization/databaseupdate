@@ -56,7 +56,7 @@
         <div class="item">
             <div class="first" > <a href="#">Popescu Ion</a></div>
             <div class="second">
-                <a class="admis" type="submit" href="#">Admis</a> <br>
+                <a class="admis" type="submit" href="#" >Admis</a> <br>
                 <a class="respins" type="submit" href="#">Respins</a>
             </div>
             <div class="clearFloat"></div>
