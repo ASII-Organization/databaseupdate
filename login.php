@@ -1,5 +1,6 @@
 <?php
-    session_start();
+    require "core/functions.php";
+    checkLogin();
     $err = 0;
     if(isset($_POST["nume"]) && isset($_POST["parola"])){
         $users = array("it", "pr&media","evaluari","re","ri","proiecte");
@@ -9,7 +10,7 @@
                 if($password ==$_POST["parola"]){
                     $_SESSION["logat"] = $user;
                     echo 'S-a logat ca si ' . $_SESSION["logat"];
-                    //header("Location: /selectMember.php");
+                    checkLogin();
                 }
                 else {
                     $err = 1;
@@ -23,7 +24,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>Login</title>
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -40,14 +41,11 @@
             <br>
             <input type="text" name="nume" placeholder="Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Name' "/><br>
             <input type="password" name="parola" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password' "/><br>
-            <button id="button" type="submit">Trimite</button> <br>
+            <button id="button" type="submit">Login</button> <br>
             <div>
                 <?php
                     if($err == 1 ) {
                         echo '<p id="error"> Userul si parola nu sunt valide. </p>';
-                    }
-                    else {
-                        //header("Location: newPage.php");
                     }
                 ?>
             </div>
