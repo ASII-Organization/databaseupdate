@@ -41,12 +41,12 @@ if(isset($_POST["submit"])) {
             <input type="text" name="nume" placeholder="Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Name' "/><br>
             <input type="text" name="prenume" placeholder="Prenume" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Prenume' "/><br>
             <input type="text" name="facebook" placeholder="Facebook url" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Facebook url' "/><br>
-            <input type="text" name="departament" placeholder="Departament(IT, Proiecte, Pr&amp;Media, Evaluari, RI, RE)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Departament(IT, Proiecte, Pr&amp;Media, Evaluari, RI, RE)' "/><br>
+            <input type="text" name="departament" placeholder="Departament(IT, Proiecte, Pr&amp;Media, Evaluari, RI, RE, Alumni)" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Departament(IT, Proiecte, Pr&amp;Media, Evaluari, RI, RE, Alumni)' "/><br>
 
             <input type="text" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email' "/><br>
             <input type="text" name="phone" placeholder="Numar telefon" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Numar telefon' "/><br>
 
-            <p id="imageUpload">Select image to upload:</p>
+            <p id="imageUpload">Selecteaza imagine de profil(imaginea trebuie sa fie tip buletin):</p>
             <input type="file" name="fileToUpload" id="fileToUpload">
             <button id="button" type="submit" name="submit" value="1">Trimite</button>
             <br>

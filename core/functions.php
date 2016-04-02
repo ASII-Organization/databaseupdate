@@ -5,7 +5,6 @@
  * Date: 01.04.2016
  * Time: 13:15
  */
-include "config.php";
 session_start();
 $target_file="";
 function checkLogin(){
@@ -23,29 +22,58 @@ function logout(){
     }
 }
 function insert($data){
-    include "config.php";
-    if($data["nume"]!=""&&$data["prenume"]!=""&&$data["facebook"]!=""&&$data["departament"]!=""&&$data["email"]!=""&&$data["phone"]!="") {
+    if (checkForDuplicate($data['facebook']))
+        if($data["nume"]!=""&&$data["prenume"]!=""&&$data["facebook"]!=""&&$data["departament"]!=""&&$data["email"]!=""&&$data["phone"]!="") {
+            if(filter_var($data["facebook"],FILTER_VALIDATE_URL)===FALSE)
+                return "Nu ai inserat un url de facebook valid.";
+            if(!(strtolower($data["departament"])=="it"||strtolower($data["departament"])=="proiecte"||strtolower($data["departament"])=="pr&media"||strtolower($data["departament"])=="evaluari"||strtolower($data["departament"])=="ri"||strtolower($data["departament"])=="re"||strtolower($data["departament"])=="alumni")){
+                return "Nu ai inserat un departament valid (Ex:\"it\", \"pr&media\",\"evaluari\",\"re\",\"ri\",\"proiecte\",\"alumni\")";
+            }
+            if(!filter_var($data["email"],FILTER_VALIDATE_EMAIL))
+                return "Nu ai inserat un email valid.";
+            if(strlen($data["phone"])<10)
+                return "Nu ai inserat un numar de telefon valid.";
+            $mesage=uploadFile();
+            if($mesage[0]=="u" &&$mesage[1]=="p"&&$mesage[2]=="l"){
+                include "config.php";
+                $sql = "INSERT INTO users (nume, prenume, facebook, departament, email, telefon , image) VALUES ('".htmlentities($data["nume"])."', '".htmlentities($data["prenume"])."', '".$data["facebook"]."', '".strtolower($data["departament"])."', '".$data["email"]."', '".$data["phone"]."', '".$mesage."')";
+                if ($conn->query($sql)) {
+                    return "Inregistrarea a avut loc cu succes!";
+                } else {
+                    return $conn->error;
+                }
+            }
+            else return $mesage;
+        }
+        else return false;
+    else {
         if(filter_var($data["facebook"],FILTER_VALIDATE_URL)===FALSE)
-        return "Nu ai inserat un url de facebook valid.";
-        if(!(strtolower($data["departament"])=="it"||strtolower($data["departament"])=="proiecte"||strtolower($data["departament"])=="pr&media"||strtolower($data["departament"])=="evaluari"||strtolower($data["departament"])=="ri"||strtolower($data["departament"])=="re")){
+            return "Nu ai inserat un url de facebook valid.";
+        if(!(strtolower($data["departament"])=="it"||strtolower($data["departament"])=="proiecte"||strtolower($data["departament"])=="pr&media"||strtolower($data["departament"])=="evaluari"||strtolower($data["departament"])=="ri"||strtolower($data["departament"])=="re"||strtolower($data["departament"])=="alumni")){
             return "Nu ai inserat un departament valid (Ex:\"it\", \"pr&media\",\"evaluari\",\"re\",\"ri\",\"proiecte\")";
         }
-        if(!filter_var($data["email"],FILTER_VALIDATE_EMAIL))
-        return "Nu ai inserat un email valid.";
-        if(strlen($data["phone"])<10)
-        return "Nu ai inserat un numar de telefon valid.";
-        $mesage=uploadFile();
-        if($mesage[0]=="u" &&$mesage[1]=="p"&&$mesage[2]=="l"){
-            $sql = "INSERT INTO users (nume, prenume, facebook, departament, email, telefon , image) VALUES ('".htmlentities($data["nume"])."', '".htmlentities($data["prenume"])."', '".$data["facebook"]."', '".strtolower($data["departament"])."', '".$data["email"]."', '".$data["phone"]."', '".$mesage."')";
-            if ($conn->query($sql) === TRUE) {
-                return "Inregistrarea a avut loc cu succes!";
-            } else {
-                return  $conn->error;
-            }
+        include "config.php";
+        $sql = "SELECT * FROM users WHERE facebook='".$data['facebook']."'";
+        $results = $conn->query($sql);
+        $membru = $results->fetch_assoc();
+        if (strpos($membru['departament'], strtolower($data['departament'])) !== false) {
+            return "Esti deja inscris la acest departament!";
         }
-        else return $mesage;
+        else {
+            $sql = "UPDATE users SET departament='".$membru['departament'].strtolower($data['departament'])."' WHERE facebook='".$data['facebook']."'";
+        }
+        $conn->query($sql);
+        return "Inregistrarea a avut loc cu succes!";
     }
-    else return "ceva";
+}
+function checkForDuplicate($facebook) {
+    include "config.php";
+    $sql="SELECT * FROM users WHERE facebook='".$facebook."'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0)
+        return false;
+    else
+        return true;
 }
 function generateRandomString($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -81,20 +109,32 @@ function uploadFile(){
 }
 function delete($ids){
     include "config.php";
-    $sql = "DELETE FROM users WHERE id=".$ids;
-    $conn->query($sql);
-    header("Location: members.php");
+    $sql = "SELECT * FROM users WHERE id=".$ids;
+    $results = $conn->query($sql);
+    $membru = $results->fetch_assoc();
+    $departament = str_replace($_SESSION['logat'], '', $membru['departament']);
+    if ($departament=="") {
+        $sql = "DELETE FROM users WHERE id=".$ids;
+        $conn->query($sql);
+        unlink($membru['image']);
+        header("Location: members.php");
+    }
+    else {
+        $sql = "UPDATE users SET ".$_SESSION['logat']."=0, departament='".$departament."' WHERE id=".$ids;
+        $conn->query($sql);
+        header("Location: members.php");
+    }
 }
 function admite($ids){
     include "config.php";
-    $sql = "UPDATE users SET flag=1 WHERE id=".$ids;
+    $sql = "UPDATE users SET ".$_SESSION['logat']."=1 WHERE id=".$ids;
     $conn->query($sql) ;
     header("Location: members.php");
 
 }
 function getMembers(){
     require "config.php";
-    $sql = "SELECT * FROM users WHERE departament='".$_SESSION["logat"]."' AND flag=0";
+    $sql = "SELECT * FROM users WHERE departament LIKE '%".$_SESSION["logat"]."%' AND ".$_SESSION['logat']."=0";
     $result = $conn->query($sql);
     $membrii =array();
     while($row = $result->fetch_assoc()){
@@ -104,7 +144,7 @@ function getMembers(){
 }
 function showMembers(){
     require "config.php";
-    $sql = "SELECT * FROM users WHERE departament='".$_SESSION["logat"]."' AND flag=1";
+    $sql = "SELECT * FROM users WHERE departament LIKE '%".$_SESSION["logat"]."%' AND ".$_SESSION['logat']."=1";
     $result = $conn->query($sql);
     $membrii =array();
     while($row = $result->fetch_assoc()){

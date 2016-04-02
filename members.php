@@ -47,9 +47,9 @@ else $membrii=showMembers();
         ?>
         <div class="item">
             <img class="photo" src="<?php echo $membru["image"]?>" />
-            <div class="first" > <a target="_blank" href="<?php echo $membru["facebook"] ?>"><?php echo $membru["nume"]?></a></div>
+            <div class="first" > <a target="_blank" href="<?php echo $membru["facebook"] ?>"><?php echo $membru["nume"]. " " . $membru['prenume']?></a></div>
             <div class="second">
-                <?php if($membru['flag']==0): ?>
+                <?php if($membru[$_SESSION['logat']]==0): ?>
                 <a class="admis" type="submit" href="/members.php?ad=<?php echo $membru["id"]?>" >Admis</a> <br>
                 <?php endif; ?>
                 <a class="respins" type="submit" href="/members.php?respinge=<?php echo $membru["id"]?>" >Respins</a>

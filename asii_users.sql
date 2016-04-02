@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.0.10.7
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: 02 Apr 2016 la 19:14
--- Versiune server: 10.1.10-MariaDB
--- PHP Version: 5.6.19
+-- Gazda: localhost:3306
+-- Timp de generare: 02 Apr 2016 la 22:05
+-- Versiune server: 5.0.96-community-log
+-- Versiune PHP: 5.4.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,10 +14,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
--- Database: `asii_users`
+-- Bază de date: `asii_website`
 --
 
 -- --------------------------------------------------------
@@ -26,8 +26,8 @@ SET time_zone = "+00:00";
 -- Structura de tabel pentru tabelul `users`
 --
 
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL auto_increment,
   `nume` varchar(255) NOT NULL,
   `prenume` varchar(255) NOT NULL,
   `facebook` varchar(255) NOT NULL,
@@ -35,28 +35,17 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `telefon` varchar(13) NOT NULL,
   `image` varchar(255) NOT NULL,
-  `flag` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `it` int(1) NOT NULL,
+  `ri` int(11) NOT NULL,
+  `re` int(11) NOT NULL,
+  `alumni` int(11) NOT NULL,
+  `evaluari` int(11) NOT NULL,
+  `proiecte` int(11) NOT NULL,
+  `pr&media` int(11) NOT NULL,
+  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `facebook` (`facebook`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD UNIQUE KEY `id` (`id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

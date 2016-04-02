@@ -3,13 +3,12 @@
     checkLogin();
     $err = 0;
     if(isset($_POST["nume"]) && isset($_POST["parola"])){
-        $users = array("it", "pr&media","evaluari","re","ri","proiecte");
-        $password = "1234567";
+        $users = array();
+        $password = "";
         foreach ($users as $user){
             if($user == strtolower($_POST["nume"])){
                 if($password ==$_POST["parola"]){
                     $_SESSION["logat"] = $user;
-                    echo 'S-a logat ca si ' . $_SESSION["logat"];
                     checkLogin();
                 }
                 else {
