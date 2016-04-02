@@ -5,9 +5,16 @@
  * Date: 31.03.2016
  * Time: 18:36
  */
-    require "core/functions.php";
-    checkIfNotLogin();
-    logout();
+require "core/functions.php";
+checkIfNotLogin();
+logout();
+if(isset($_GET["ad"]))
+    admite($_GET["ad"]);
+else if(isset($_GET["respinge"]))
+    delete($_GET["respinge"]);
+if (!isset($_GET['showAdmis']))
+    $membrii=getMembers();
+else $membrii=showMembers();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,40 +34,29 @@
     <header>
         <img id="logo" src="img/logoASII.png"/>
         <span><b><?php echo strtoupper($_SESSION["logat"]) ?></b></span>
+        <br />
+        <?php if(!isset($_GET["showAdmis"])): ?>
+        <a class="madmis" href="/members.php?showAdmis=1">Afiseaza membrii admisi</a>
+        <?php else: ?>
+        <a class="madmis" href="/members.php">Lista de inscrisi</a>
+        <?php endif;?>
     </header>
     <div class="items">
+        <?php
+        foreach ($membrii as $membru):
+        ?>
         <div class="item">
-            <div class="first" > <a href="#">Popescu Ion</a></div>
+            <img class="photo" src="<?php echo $membru["image"]?>" />
+            <div class="first" > <a target="_blank" href="<?php echo $membru["facebook"] ?>"><?php echo $membru["nume"]?></a></div>
             <div class="second">
-                <a class="admis" type="submit" href="#">Admis</a> <br>
-                <a class="respins" type="submit" href="#">Respins</a>
+                <?php if($membru['flag']==0): ?>
+                <a class="admis" type="submit" href="/members.php?ad=<?php echo $membru["id"]?>" >Admis</a> <br>
+                <?php endif; ?>
+                <a class="respins" type="submit" href="/members.php?respinge=<?php echo $membru["id"]?>" >Respins</a>
             </div>
             <div class="clearFloat"></div>
         </div>
-        <div class="item">
-            <div class="first" > <a href="#">Popescu Ion</a></div>
-            <div class="second">
-                <a class="admis" type="submit" href="#">Admis</a> <br>
-                <a class="respins" type="submit" href="#">Respins</a>
-            </div>
-            <div class="clearFloat"></div>
-        </div>
-        <div class="item">
-            <div class="first" > <a href="#">Popescu Ion</a></div>
-            <div class="second">
-                <a class="admis" type="submit" href="#">Admis</a> <br>
-                <a class="respins" type="submit" href="#">Respins</a>
-            </div>
-            <div class="clearFloat"></div>
-        </div>
-        <div class="item">
-            <div class="first" > <a href="#">Popescu Ion</a></div>
-            <div class="second">
-                <a class="admis" type="submit" href="#" >Admis</a> <br>
-                <a class="respins" type="submit" href="#">Respins</a>
-            </div>
-            <div class="clearFloat"></div>
-        </div>
+        <?php endforeach; ?>
     </div>
 </div>
 <footer id="footer">

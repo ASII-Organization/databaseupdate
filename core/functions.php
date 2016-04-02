@@ -36,9 +36,9 @@ function insert($data){
         return "Nu ai inserat un numar de telefon valid.";
         $mesage=uploadFile();
         if($mesage[0]=="u" &&$mesage[1]=="p"&&$mesage[2]=="l"){
-            $sql = "INSERT INTO users (nume, prenume, facebook, departament, email, telefon , image) VALUES ('".htmlentities($data["nume"])."', '".htmlentities($data["prenume"])."', '".$data["facebook"]."', '".$data["departament"]."', '".$data["email"]."', '".$data["phone"]."', '".$mesage."')";
+            $sql = "INSERT INTO users (nume, prenume, facebook, departament, email, telefon , image) VALUES ('".htmlentities($data["nume"])."', '".htmlentities($data["prenume"])."', '".$data["facebook"]."', '".strtolower($data["departament"])."', '".$data["email"]."', '".$data["phone"]."', '".$mesage."')";
             if ($conn->query($sql) === TRUE) {
-                return "New record created successfully";
+                return "Inregistrarea a avut loc cu succes!";
             } else {
                 return  $conn->error;
             }
@@ -79,12 +79,36 @@ function uploadFile(){
         else return "Nu ai inserat o imagine.";
     }
 }
-function delete($id){
+function delete($ids){
     include "config.php";
-    $sql = "DELETE FROM asii_users WHERE $id";
-    if ($conn->query($sql) === TRUE) {
-        return "Record deleted successfully";
-    } else {
-        return  $conn->error;
+    $sql = "DELETE FROM users WHERE id=".$ids;
+    $conn->query($sql);
+    header("Location: members.php");
+}
+function admite($ids){
+    include "config.php";
+    $sql = "UPDATE users SET flag=1 WHERE id=".$ids;
+    $conn->query($sql) ;
+    header("Location: members.php");
+
+}
+function getMembers(){
+    require "config.php";
+    $sql = "SELECT * FROM users WHERE departament='".$_SESSION["logat"]."' AND flag=0";
+    $result = $conn->query($sql);
+    $membrii =array();
+    while($row = $result->fetch_assoc()){
+        array_push($membrii, $row);
     }
+    return $membrii;
+}
+function showMembers(){
+    require "config.php";
+    $sql = "SELECT * FROM users WHERE departament='".$_SESSION["logat"]."' AND flag=1";
+    $result = $conn->query($sql);
+    $membrii =array();
+    while($row = $result->fetch_assoc()){
+        array_push($membrii, $row);
+    }
+    return $membrii;
 }

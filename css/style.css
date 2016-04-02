@@ -135,6 +135,7 @@ span{
     box-sizing: border-box;
     margin-top: 10px;
     padding: 10px 0;
+    position: relative;
 }
 .first{
     float: left;
@@ -160,6 +161,8 @@ span{
     font-family: Segoe UI ;
     font-size: 14px;
     font-weight: bold;
+    position: absolute;
+    right: 20px;
 }
 .second .admis{
     padding-right: 20%;
@@ -184,4 +187,19 @@ span{
     #button {
         width: 90%;
     }
+}
+.photo{
+    width: 50px;
+    height: auto;
+    float: left;
+}
+.madmis{
+    float: right;
+    color: #489bca;
+    text-decoration: none;
+    position: relative;
+    top: -30px;
+}
+.madmis:hover{
+    text-decoration: underline;
 }
