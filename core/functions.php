@@ -91,7 +91,7 @@ function uploadFile(){
     $imageFileType = pathinfo($target,PATHINFO_EXTENSION);
     $target_file = $target_dir . generateRandomString(50). "." . $imageFileType ;
     if(isset($_POST["submit"])) {
-        if($imageFileType=="png"||$imageFileType=="jpg"||$imageFileType=="jpeg"){
+        if($imageFileType=="png"||$imageFileType=="jpg"||$imageFileType=="jpeg"||$imageFileType=="bmp"){
             if ($_FILES["fileToUpload"]["size"] > 8000000) {
                 return "Imaginea este prea mare";
             }
